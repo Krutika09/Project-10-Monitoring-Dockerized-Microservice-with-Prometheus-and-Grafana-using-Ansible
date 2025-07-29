@@ -1,5 +1,8 @@
-FROM python:3.10-slim
+FROM python:3.9-slim
+
 WORKDIR /app
-COPY app.py .
-RUN pip install flask prometheus_client
-CMD ["python", "app.py"]
+COPY . .
+RUN pip install -r requirements.txt
+EXPOSE 8000
+CMD ["python3", "app.py"]
+
