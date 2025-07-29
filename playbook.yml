@@ -1,0 +1,25 @@
+- name: Setup Docker, Microservice, Prometheus, and Grafana
+  hosts: targets
+  become: true
+
+  roles:
+    - docker
+    - prometheus
+    - grafana
+
+- name: Build and start microservice
+  hosts: targets
+  become: true
+  tasks:
+    - name: Copy project files
+      synchronize:
+        src: .
+        dest: /home/ubuntu/monitoring
+        rsync_opts:
+          - "--exclude=inventory"
+          - "--exclude=ansible.cfg"
+
+    - name: Build and start Docker Compose
+      command: docker-compose up -d
+      args:
+        chdir: /home/ubuntu/monitoring
